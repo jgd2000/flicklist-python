@@ -103,19 +103,33 @@ class AddMovie(webapp2.RequestHandler):
 
         # TODO 2
         # if the user typed nothing at all, redirect and yell at them
-        if len(new_movie)==0:
-            sentence =  "Please specify the name of the movie you want to add <br><a href='/' title='Back to the Home page'><b>HOME</b></a>"
-            content = page_header + "<p>" + sentence + "</p>" + page_footer
+#        if len(new_movie)==0:
+#            sentence =  "Please specify the name of the movie you want to add <br><a href='/' title='Back to the Home page'><b>HOME</b></a>"
+#            content = page_header + "<p>" + sentence + "</p>" + page_footer
 
-            self.response.write(content)
+#            self.response.write(content)
+#        if not new_movie:
+        if len(new_movie)==0:
+            error = "Please specify the name of the movie you want to add"
+
+
+            # redirect to homepage, and include error as a query parameter in the URL
+            self.redirect("/?error=" + error)
 
 
         # TODO 3
         # if the user wants to add a terrible movie, redirect and yell at them
         if new_movie in terrible_movies:
-            sentence =  "Trust me, you don't want to add " + new_movie + "to your Watchlist.<br><a href='/' title='Back to the Home page'><b>HOME</b></a>"
-            content = page_header + "<p>" + sentence + "</p>" + page_footer
-            self.response.write(content)
+#            sentence =  "Trust me, you don't want to add " + new_movie + "to your Watchlist.<br><a href='/' title='Back to the Home page'><b>HOME</b></a>"
+#            content = page_header + "<p>" + sentence + "</p>" + page_footer
+#            self.response.write(content)
+
+            # make a helpful error message
+            error = "Trust me, you don't want to add '{0}' to your Watchlist.".format(new_movie)
+            error_escaped = cgi.escape(error, quote=True)
+
+            # redirect to homepage, and include error as a query parameter in the URL
+            self.redirect("/?error=" + error_escaped)
 
         # TODO 1
         # 'escape' the user's input so that if they typed HTML, it doesn't mess up our site
